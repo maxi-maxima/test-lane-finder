@@ -1,6 +1,8 @@
 import type { LanePlan, RepositorySnapshot, TestLane } from "./types.js";
 import { detectStacks } from "./detect.js";
 
+const NODE_METADATA_FILES = new Set(["package.json", "package-lock.json", "npm-shrinkwrap.json", "pnpm-lock.yaml", "yarn.lock", "bun.lock", "bun.lockb"]);
+
 export function planLanes(snapshot: RepositorySnapshot, changedFiles: string[]): LanePlan {
   const normalizedChanged = changedFiles.map((file) => file.replaceAll("\\", "/"));
   const stacks = detectStacks(snapshot);
@@ -9,7 +11,7 @@ export function planLanes(snapshot: RepositorySnapshot, changedFiles: string[]):
   const changed = new Set(normalizedChanged);
   const packageScripts = snapshot.packageScripts || {};
 
-  const changedNode = normalizedChanged.some((file) => /\.(tsx?|jsx?|mjs|cjs)$/.test(file) || file === "package.json");
+  const changedNode = normalizedChanged.some((file) => /\.(tsx?|jsx?|mjs|cjs)$/.test(file) || NODE_METADATA_FILES.has(file));
   const changedPython = normalizedChanged.some((file) => file.endsWith(".py") || ["pyproject.toml", "requirements.txt"].includes(file));
   const changedRuby = normalizedChanged.some((file) => file.endsWith(".rb") || file === "Gemfile");
   const changedGo = normalizedChanged.some((file) => file.endsWith(".go") || file === "go.mod");
@@ -18,7 +20,7 @@ export function planLanes(snapshot: RepositorySnapshot, changedFiles: string[]):
   const changedCi = normalizedChanged.some((file) => file.startsWith(".github/workflows/") || file.includes("ci"));
 
   if (changedNode && stacks.some((stack) => stack.stack === "node")) {
-    addLane("node-test", "focused", scriptCommand(packageScripts, "test", "npm test -- --run"), "TypeScript or JavaScript source changed", ["node"]);
+    addLane("node-test", "focused", scriptCommand(packageScripts, "test", "npm test -- --run"), "Node source or dependency metadata changed", ["node"]);
     if (packageScripts.lint) {
       addLane("node-lint", "standard", "npm run lint", "Node lint script exists", ["node"]);
     }

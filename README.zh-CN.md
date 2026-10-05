@@ -64,7 +64,7 @@ Lanes: 5
 
 | 技术栈 | 信号 | 示例路线 |
 | --- | --- | --- |
-| Node | `package.json`、JS/TS 文件、scripts | `npm test -- --run`、`npm run lint`、`npm run build` |
+| Node | `package.json`、锁文件、JS/TS 文件、scripts | `npm test -- --run`、`npm run lint`、`npm run build` |
 | Python | `pyproject.toml`、`requirements.txt`、`.py` 文件 | `py -3 -m pytest`、`py -3 -m ruff check .` |
 | Ruby | `Gemfile`、`.rb` 文件 | `bundle exec ruby -Itest` |
 | Go | `go.mod`、`.go` 文件 | `go test ./...` |

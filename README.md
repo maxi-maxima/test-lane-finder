@@ -64,7 +64,7 @@ Lanes: 5
 
 | Stack | Signals | Example lanes |
 | --- | --- | --- |
-| Node | `package.json`, JS/TS files, scripts | `npm test -- --run`, `npm run lint`, `npm run build` |
+| Node | `package.json`, lockfiles, JS/TS files, scripts | `npm test -- --run`, `npm run lint`, `npm run build` |
 | Python | `pyproject.toml`, `requirements.txt`, `.py` files | `py -3 -m pytest`, `py -3 -m ruff check .` |
 | Ruby | `Gemfile`, `.rb` files | `bundle exec ruby -Itest` |
 | Go | `go.mod`, `.go` files | `go test ./...` |

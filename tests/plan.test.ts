@@ -22,9 +22,33 @@ describe("planLanes", () => {
     ]);
     expect(plan.lanes[0]).toMatchObject({
       level: "focused",
-      reason: "TypeScript or JavaScript source changed"
+      reason: "Node source or dependency metadata changed"
     });
   });
+
+  it.each(["package-lock.json", "npm-shrinkwrap.json", "pnpm-lock.yaml", "yarn.lock", "bun.lock", "bun.lockb"])(
+    "selects Node lanes when only %s changed",
+    (lockfile) => {
+      const plan = planLanes(
+        {
+          files: ["package.json", "src/app.ts"],
+          packageScripts: {
+            test: "vitest run",
+            lint: "eslint .",
+            build: "tsc -p tsconfig.json"
+          }
+        },
+        [lockfile]
+      );
+
+      expect(plan.lanes.map((lane) => lane.command)).toEqual([
+        "npm test -- --run",
+        "npm run lint",
+        "npm run build"
+      ]);
+      expect(plan.lanes[0]?.reason).toBe("Node source or dependency metadata changed");
+    }
+  );
 
   it("selects Python pytest and ruff lanes for changed Python files", () => {
     const plan = planLanes(
