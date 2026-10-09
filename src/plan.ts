@@ -15,7 +15,7 @@ export function planLanes(snapshot: RepositorySnapshot, changedFiles: string[]):
   const changedPython = normalizedChanged.some((file) => file.endsWith(".py") || ["pyproject.toml", "requirements.txt"].includes(file));
   const changedRuby = normalizedChanged.some((file) => file.endsWith(".rb") || file === "Gemfile");
   const changedGo = normalizedChanged.some((file) => file.endsWith(".go") || file === "go.mod");
-  const changedRust = normalizedChanged.some((file) => file.endsWith(".rs") || file === "Cargo.toml");
+  const changedRust = normalizedChanged.some((file) => file.endsWith(".rs") || ["Cargo.toml", "Cargo.lock"].includes(file));
   const changedDocsOnly = normalizedChanged.length > 0 && normalizedChanged.every((file) => file.endsWith(".md") || file.startsWith("docs/"));
   const changedCi = normalizedChanged.some((file) => file.startsWith(".github/workflows/") || file.includes("ci"));
 
@@ -45,7 +45,7 @@ export function planLanes(snapshot: RepositorySnapshot, changedFiles: string[]):
   }
 
   if (changedRust && stacks.some((stack) => stack.stack === "rust")) {
-    addLane("rust-test", "focused", "cargo test", "Rust source changed", ["rust"]);
+    addLane("rust-test", "focused", "cargo test", "Rust source or dependency metadata changed", ["rust"]);
     addLane("rust-check", "standard", "cargo check", "Cargo project detected", ["rust"]);
   }
 

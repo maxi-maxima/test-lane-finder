@@ -68,7 +68,7 @@ Lanes: 5
 | Python | `pyproject.toml`, `requirements.txt`, `.py` files | `py -3 -m pytest`, `py -3 -m ruff check .` |
 | Ruby | `Gemfile`, `.rb` files | `bundle exec ruby -Itest` |
 | Go | `go.mod`, `.go` files | `go test ./...` |
-| Rust | `Cargo.toml`, `.rs` files | `cargo test`, `cargo check` |
+| Rust | `Cargo.toml`, `Cargo.lock`, `.rs` files | `cargo test`, `cargo check` |
 | Docs | Markdown/docs changes | rendered documentation review |
 | CI | workflows/deploy paths | workflow syntax and secrets review |
 

@@ -68,7 +68,7 @@ Lanes: 5
 | Python | `pyproject.toml`、`requirements.txt`、`.py` 文件 | `py -3 -m pytest`、`py -3 -m ruff check .` |
 | Ruby | `Gemfile`、`.rb` 文件 | `bundle exec ruby -Itest` |
 | Go | `go.mod`、`.go` 文件 | `go test ./...` |
-| Rust | `Cargo.toml`、`.rs` 文件 | `cargo test`、`cargo check` |
+| Rust | `Cargo.toml`、`Cargo.lock`、`.rs` 文件 | `cargo test`、`cargo check` |
 | Docs | Markdown/docs 变更 | 渲染后的文档审查 |
 | CI | workflow/deploy 路径 | workflow 语法和密钥需求审查 |
 

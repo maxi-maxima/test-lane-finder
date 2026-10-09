@@ -61,4 +61,16 @@ describe("planLanes", () => {
 
     expect(plan.lanes.map((lane) => lane.command)).toEqual(["py -3 -m pytest", "py -3 -m ruff check ."]);
   });
+
+  it("selects Rust lanes when only Cargo.lock changed", () => {
+    const plan = planLanes(
+      {
+        files: ["Cargo.toml", "Cargo.lock", "src/lib.rs"]
+      },
+      ["Cargo.lock"]
+    );
+
+    expect(plan.lanes.map((lane) => lane.command)).toEqual(["cargo test", "cargo check"]);
+    expect(plan.lanes[0]?.reason).toBe("Rust source or dependency metadata changed");
+  });
 });
