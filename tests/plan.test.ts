@@ -73,4 +73,26 @@ describe("planLanes", () => {
     expect(plan.lanes.map((lane) => lane.command)).toEqual(["cargo test", "cargo check"]);
     expect(plan.lanes[0]?.reason).toBe("Rust source or dependency metadata changed");
   });
+
+  it("does not select the CI lane for ordinary documentation filenames", () => {
+    const plan = planLanes(
+      {
+        files: ["docs/decision.md"]
+      },
+      ["docs/decision.md"]
+    );
+
+    expect(plan.lanes.map((lane) => lane.id)).toEqual(["docs-review"]);
+  });
+
+  it("selects the CI lane when an explicit workflow path starts with ./", () => {
+    const plan = planLanes(
+      {
+        files: [".github/workflows/ci.yml"]
+      },
+      ["./.github/workflows/ci.yml"]
+    );
+
+    expect(plan.lanes.map((lane) => lane.id)).toEqual(["ci-review"]);
+  });
 });

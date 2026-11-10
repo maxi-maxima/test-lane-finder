@@ -45,11 +45,19 @@ export function detectStacks(snapshot: RepositorySnapshot): StackSignal[] {
     add("docs", 80, ["documentation files present"]);
   }
 
-  if ([...files].some((file) => file.startsWith(".github/workflows/") || file.includes("ci"))) {
+  if ([...files].some(isCiPath)) {
     add("ci", 80, ["CI or workflow files present"]);
   }
 
   return signals.sort((a, b) => b.confidence - a.confidence || a.stack.localeCompare(b.stack));
+}
+
+export function isCiPath(file: string): boolean {
+  const normalized = normalizePath(file).replace(/^(\.\/)+/, "");
+  return normalized.startsWith(".github/workflows/") ||
+    normalized.startsWith(".circleci/") ||
+    normalized.startsWith("ci/") ||
+    [".gitlab-ci.yml", ".gitlab-ci.yaml", "azure-pipelines.yml", "azure-pipelines.yaml", "bitbucket-pipelines.yml", "bitbucket-pipelines.yaml", "Jenkinsfile"].includes(normalized);
 }
 
 function normalizePath(file: string): string {

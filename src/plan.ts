@@ -1,5 +1,5 @@
 import type { LanePlan, RepositorySnapshot, TestLane } from "./types.js";
-import { detectStacks } from "./detect.js";
+import { detectStacks, isCiPath } from "./detect.js";
 
 const NODE_METADATA_FILES = new Set(["package.json", "package-lock.json", "npm-shrinkwrap.json", "pnpm-lock.yaml", "yarn.lock", "bun.lock", "bun.lockb"]);
 
@@ -17,7 +17,7 @@ export function planLanes(snapshot: RepositorySnapshot, changedFiles: string[]):
   const changedGo = normalizedChanged.some((file) => file.endsWith(".go") || file === "go.mod");
   const changedRust = normalizedChanged.some((file) => file.endsWith(".rs") || ["Cargo.toml", "Cargo.lock"].includes(file));
   const changedDocsOnly = normalizedChanged.length > 0 && normalizedChanged.every((file) => file.endsWith(".md") || file.startsWith("docs/"));
-  const changedCi = normalizedChanged.some((file) => file.startsWith(".github/workflows/") || file.includes("ci"));
+  const changedCi = normalizedChanged.some(isCiPath);
 
   if (changedNode && stacks.some((stack) => stack.stack === "node")) {
     addLane("node-test", "focused", scriptCommand(packageScripts, "test", "npm test -- --run"), "Node source or dependency metadata changed", ["node"]);

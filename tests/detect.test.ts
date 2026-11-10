@@ -26,4 +26,19 @@ describe("detectStacks", () => {
       })
     );
   });
+
+  it("does not mistake ordinary filenames containing ci for CI signals", () => {
+    const stacks = detectStacks({
+      files: ["docs/decision.md"]
+    });
+
+    expect(stacks.map((stack) => stack.stack)).toEqual(["docs"]);
+  });
+
+  it.each([".github/workflows/ci.yml", "./.github/workflows/ci.yml", ".circleci/config.yml", "ci/check.yml", ".gitlab-ci.yml", "azure-pipelines.yml", "bitbucket-pipelines.yml", "Jenkinsfile"])(
+    "detects %s as a CI signal",
+    (file) => {
+      expect(detectStacks({ files: [file] }).map((stack) => stack.stack)).toEqual(["ci"]);
+    }
+  );
 });

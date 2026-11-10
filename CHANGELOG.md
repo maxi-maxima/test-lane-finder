@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Avoid treating ordinary paths that merely contain `ci` as CI configuration.
+- Remove the unused vulnerable Zod runtime dependency.
+
 ## 0.1.0
 
 - Initial public release.
