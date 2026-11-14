@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Run CI with the Node 24-based `actions/setup-node@v7` runtime.
 - Avoid treating ordinary paths that merely contain `ci` as CI configuration.
 - Remove the unused vulnerable Zod runtime dependency.
 
